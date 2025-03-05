@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Prova</title>
     <style>
         body {
             text-align: center;
-            background-color: black;
+            background-color: #000000;
         }
         canvas {
-            background-color: white;
+            background: #ffffff;
             display: block;
             margin: 20px auto;
         }
@@ -21,36 +21,86 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-        
 
+        
         class Paddle {
             constructor() {
-                this.widht = 100;
+                this.width = 100;
                 this.height = 10;
-                this.x = (canvas.width - this.width) /2;
+                this.x = (canvas.width - this.width) / 2;
                 this.y = canvas.height - this.height - 10;
                 this.speed = 7;
                 this.dx = 0;
             }
+
             draw() {
                 ctx.fillStyle = "blue";
-                ctx.fillRect(this.x, this.y, this,width, this.height);
+                ctx.fillRect(this.x, this.y, this.width, this.height);
             }
-            
+
             move() {
                 this.x += this.dx;
                 if (this.x < 0) this.x = 0;
-                if (this.x + this.widht > canvas.widht) this.x = canvas.widht - this.widht;
-             
+                if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
             }
         }
-    
-    
-    
-    
-    
-    
-    
+
+        class Ball {
+            constructor() {
+                this.radius = 7;
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                this.dx = 4;
+                this.dy = -4;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "red";
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            move() {
+                this.x += this.dx;
+                this.y += this.dy;
+
+                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                    this.dx *= -1;
+                }
+                if (this.y - this.radius < 0) {
+                    this.dy *= -1;
+                }
+            }
+        }
+
+        class Block {
+            constructor(x, y) {
+                this.widht = 75;
+                this.height = 20;
+                this.x = x;
+                this.y = y;
+                this.visible = true;
+            }
+            draw() {
+                if(this.visible) {
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(this.x, this.y, this.widht, this.height);
+
+                }
+            }
+        }
+        const paddle = new Paddle();
+        const ball = new Ball();
+        const blocks = [];
+        for (let row = 0; row < 3, row++) {
+            for(let col = 0; col < 5; col++){
+                blocks.push(new Block(10 + col * 80, 30 + row + 30));
+            }
+        }
+        
+
     </script>
 </body>
 </html>
