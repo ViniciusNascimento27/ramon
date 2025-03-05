@@ -39,21 +39,21 @@
                 this.color = color;
                 this.visible = true; 
             }
-            
+
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
         }
 
-         //aqui criei minha "raquete"
+        //aqui criei minha "raquete"
         class Paddle extends Entity {
             constructor() {
                 super((canvas.width - 100) / 2, canvas.height - 20, 100, 10, "blue");
                 this.speed = 7;
                 this.dx = 0;
             }
-            //dando movimento para ela conforme o tamanho do canvas
+        //dando movimento para ela conforme o tamanho do canvas
             move() {
                 this.x += this.dx;
                 if (this.x < 0) this.x = 0;
@@ -64,7 +64,7 @@
         //aqui criei a bola
         class Ball extends Entity {
             constructor() {
-                super(canvas.width / 2, canvas.height / 2, 14, 14, "red"); 
+                super(canvas.width / 2, canvas.height / 2, 14, 14, "red");
                 this.radius = 7;
                 this.dx = 4;
                 this.dy = -4;
@@ -82,16 +82,24 @@
                 this.x += this.dx;
                 this.y += this.dy;
 
+                // Colisão com as paredes laterais
                 if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
                     this.dx *= -1;
                 }
+                // Colisão com o topo
                 if (this.y - this.radius < 0) {
                     this.dy *= -1;
                 }
+                // Colisão com o chão
+                if (this.y + this.radius > canvas.height - 10) { 
+                    
+                    this.x = canvas.width / 2;
+                    this.y = canvas.height / 2;
+                    this.dy *= -1; 
+                }
             }
         }
-
-        //aqui criei os blocos que ficam no topo
+         //aqui criei os blocos que ficam no topo
         class Block extends Entity {
             constructor(x, y) {
                 super(x, y, 75, 20, "green");
@@ -104,20 +112,29 @@
             }
         }
 
+        class Ground extends Entity {
+            constructor() {
+                super(0, canvas.height - 10, canvas.width, 10, "brown"); // Chão ocupa a largura toda da tela
+            }
+        }
+
         const paddle = new Paddle();
         const ball = new Ball();
+        const ground = new Ground();
         const blocks = [];
+        
         for (let row = 0; row < 3; row++) {
             for (let col = 0; col < 5; col++) {
                 blocks.push(new Block(10 + col * 80, 30 + row * 30));
             }
         }
-        //aqui crie uma função que atualiza o jogo quando a bola bate nos quadrados
+         //aqui crie uma função que atualiza o jogo quando a bola bate nos quadrados
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             paddle.move();
             ball.move();
-        //colisão da bola com a raquete
+
+            // Colisão da bola com a raquete
             if (
                 ball.x > paddle.x &&
                 ball.x < paddle.x + paddle.width &&
@@ -125,7 +142,8 @@
             ) {
                 ball.dy *= -1;
             }
-             //colisão da bola com os blocos
+
+            // Colisão da bola com os blocos
             blocks.forEach(block => {
                 if (
                     block.visible &&
@@ -139,13 +157,12 @@
                     score += 10;
                 }
             });
-
             paddle.draw();
             ball.draw();
             blocks.forEach(block => block.draw());
+            ground.draw(); 
             
             document.getElementById("score").innerText = `Pontuação: ${score}`;
-            //sistema de pontuação
             requestAnimationFrame(update);
         }
 
