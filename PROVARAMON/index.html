@@ -21,8 +21,6 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-
-        
         class Paddle {
             constructor() {
                 this.width = 100;
@@ -32,20 +30,16 @@
                 this.speed = 7;
                 this.dx = 0;
             }
-
             draw() {
                 ctx.fillStyle = "blue";
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
-
             move() {
                 this.x += this.dx;
                 if (this.x < 0) this.x = 0;
                 if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
             }
         }
-
-        
         class Ball {
             constructor() {
                 this.radius = 7;
@@ -54,7 +48,6 @@
                 this.dx = 4;
                 this.dy = -4;
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -62,7 +55,6 @@
                 ctx.fill();
                 ctx.closePath();
             }
-
             move() {
                 this.x += this.dx;
                 this.y += this.dy;
@@ -75,8 +67,6 @@
                 }
             }
         }
-
-        
         class Block {
             constructor(x, y) {
                 this.width = 75;
@@ -85,7 +75,6 @@
                 this.y = y;
                 this.visible = true;
             }
-
             draw() {
                 if (this.visible) {
                     ctx.fillStyle = "green";
@@ -93,8 +82,6 @@
                 }
             }
         }
-
-        
         const paddle = new Paddle();
         const ball = new Ball();
         const blocks = [];
@@ -103,14 +90,10 @@
                 blocks.push(new Block(10 + col * 80, 30 + row * 30));
             }
         }
-
-        
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             paddle.move();
             ball.move();
-
-           
             if (
                 ball.x > paddle.x &&
                 ball.x < paddle.x + paddle.width &&
@@ -118,8 +101,6 @@
             ) {
                 ball.dy *= -1;
             }
-
-
             blocks.forEach(block => {
                 if (
                     block.visible &&
@@ -132,7 +113,6 @@
                     block.visible = false;
                 }
             });
-
             paddle.draw();
             ball.draw();
             blocks.forEach(block => block.draw());
@@ -146,8 +126,7 @@
         document.addEventListener("keyup", (e) => {
             if (e.key === "ArrowRight" || e.key === "ArrowLeft") paddle.dx = 0;
         });
-
-
+    
         update();
     </script>
 </body>
