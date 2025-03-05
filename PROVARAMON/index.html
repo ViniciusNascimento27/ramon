@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prova</title>
+    <title>Breakout Game</title>
     <style>
         body {
             text-align: center;
@@ -22,7 +22,7 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        
+        // Classe da Raquete
         class Paddle {
             constructor() {
                 this.width = 100;
@@ -45,6 +45,7 @@
             }
         }
 
+        // Classe da Bola
         class Ball {
             constructor() {
                 this.radius = 7;
@@ -75,32 +76,67 @@
             }
         }
 
+        // Classe dos Blocos
         class Block {
             constructor(x, y) {
-                this.widht = 75;
+                this.width = 75;
                 this.height = 20;
                 this.x = x;
                 this.y = y;
                 this.visible = true;
             }
-            draw() {
-                if(this.visible) {
-                    ctx.fillStyle = "green";
-                    ctx.fillRect(this.x, this.y, this.widht, this.height);
 
+            draw() {
+                if (this.visible) {
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
                 }
             }
         }
+
+        // Instâncias do jogo
         const paddle = new Paddle();
         const ball = new Ball();
         const blocks = [];
-        for (let row = 0; row < 3, row++) {
-            for(let col = 0; col < 5; col++){
-                blocks.push(new Block(10 + col * 80, 30 + row + 30));
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 5; col++) {
+                blocks.push(new Block(10 + col * 80, 30 + row * 30));
             }
         }
-        
 
-    </script>
-</body>
-</html>
+        // Loop do jogo
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            paddle.move();
+            ball.move();
+
+            // Colisão com a raquete
+            if (
+                ball.x > paddle.x &&
+                ball.x < paddle.x + paddle.width &&
+                ball.y + ball.radius > paddle.y
+            ) {
+                ball.dy *= -1;
+            }
+
+            // Colisão com blocos
+            blocks.forEach(block => {
+                if (
+                    block.visible &&
+                    ball.x > block.x &&
+                    ball.x < block.x + block.width &&
+                    ball.y - ball.radius < block.y + block.height &&
+                    ball.y + ball.radius > block.y
+                ) {
+                    ball.dy *= -1;
+                    block.visible = false;
+                }
+            });
+
+            paddle.draw();
+            ball.draw();
+            blocks.forEach(block => block.draw());
+            requestAnimationFrame(update);
+        }
+
+        update();
