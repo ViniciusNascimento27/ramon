@@ -14,13 +14,20 @@
             display: block;
             margin: 150px auto;
         }
+        #score {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="470" height="320"></canvas>
+    <div id="score">Pontuação:  </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        let score = 0;
         //aqui criei minha "raquete"
         class Paddle {
             constructor() {
@@ -103,6 +110,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             paddle.move();
             ball.move();
+            //colisão da bola com a raquete
             if (
                 ball.x > paddle.x &&
                 ball.x < paddle.x + paddle.width &&
@@ -110,6 +118,7 @@
             ) {
                 ball.dy *= -1;
             }
+            //colisão da bola com os blocos
             blocks.forEach(block => {
                 if (
                     block.visible &&
@@ -120,11 +129,15 @@
                 ) {
                     ball.dy *= -1;
                     block.visible = false;
+                    //adicione a pontuação
+                    score += 10;
                 }
             });
             paddle.draw();
             ball.draw();
             blocks.forEach(block => block.draw());
+            
+            document.getElementById("score").innerText = `Pontuação: ${score}`;
             requestAnimationFrame(update);
         }
         //aqui criei teclas para controlar a "raquete"
