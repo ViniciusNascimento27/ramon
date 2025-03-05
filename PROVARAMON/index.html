@@ -22,7 +22,7 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Classe da Raquete
+        
         class Paddle {
             constructor() {
                 this.width = 100;
@@ -45,7 +45,7 @@
             }
         }
 
-        // Classe da Bola
+        
         class Ball {
             constructor() {
                 this.radius = 7;
@@ -76,7 +76,7 @@
             }
         }
 
-        // Classe dos Blocos
+        
         class Block {
             constructor(x, y) {
                 this.width = 75;
@@ -94,7 +94,7 @@
             }
         }
 
-        // Instâncias do jogo
+        
         const paddle = new Paddle();
         const ball = new Ball();
         const blocks = [];
@@ -104,13 +104,13 @@
             }
         }
 
-        // Loop do jogo
+        
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             paddle.move();
             ball.move();
 
-            // Colisão com a raquete
+           
             if (
                 ball.x > paddle.x &&
                 ball.x < paddle.x + paddle.width &&
@@ -119,7 +119,7 @@
                 ball.dy *= -1;
             }
 
-            // Colisão com blocos
+
             blocks.forEach(block => {
                 if (
                     block.visible &&
@@ -138,6 +138,15 @@
             blocks.forEach(block => block.draw());
             requestAnimationFrame(update);
         }
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight") paddle.dx = paddle.speed;
+            if (e.key === "ArrowLeft") paddle.dx = -paddle.speed;
+        });
+
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowRight" || e.key === "ArrowLeft") paddle.dx = 0;
+        });
+
 
         update();
     </script>
