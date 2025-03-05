@@ -21,6 +21,7 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        //aqui criei minha "raquete"
         class Paddle {
             constructor() {
                 this.width = 100;
@@ -30,16 +31,19 @@
                 this.speed = 7;
                 this.dx = 0;
             }
+            //criando um molde pra ele e cor
             draw() {
                 ctx.fillStyle = "blue";
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
+            //dando movimento para ela conforme o tamanho do canvas
             move() {
                 this.x += this.dx;
                 if (this.x < 0) this.x = 0;
                 if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
             }
         }
+        //aqui criei a bolla
         class Ball {
             constructor() {
                 this.radius = 7;
@@ -48,6 +52,7 @@
                 this.dx = 4;
                 this.dy = -4;
             }
+            //dando um formato para a bola e personalizando ela
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -55,6 +60,7 @@
                 ctx.fill();
                 ctx.closePath();
             }
+            //dando movimento para ela conforme o tamanho do meu canvas
             move() {
                 this.x += this.dx;
                 this.y += this.dy;
@@ -67,6 +73,7 @@
                 }
             }
         }
+        //aqui criei os blocos que ficam no topo
         class Block {
             constructor(x, y) {
                 this.width = 75;
@@ -75,6 +82,7 @@
                 this.y = y;
                 this.visible = true;
             }
+            //desenhando os blocos e personalizando eles tbm
             draw() {
                 if (this.visible) {
                     ctx.fillStyle = "green";
@@ -90,6 +98,7 @@
                 blocks.push(new Block(10 + col * 80, 30 + row * 30));
             }
         }
+        //aqui crie uma função que atualiza o jogo quando a bola bate nos quadrardos
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             paddle.move();
@@ -118,6 +127,7 @@
             blocks.forEach(block => block.draw());
             requestAnimationFrame(update);
         }
+        //aqui criei teclas para controlar a "raquete"
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowRight") paddle.dx = paddle.speed;
             if (e.key === "ArrowLeft") paddle.dx = -paddle.speed;
