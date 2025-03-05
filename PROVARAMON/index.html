@@ -21,7 +21,36 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-    </script>
+        
+
+        class Paddle {
+            constructor() {
+                this.widht = 100;
+                this.height = 10;
+                this.x = (canvas.width - this.width) /2;
+                this.y = canvas.height - this.height - 10;
+                this.speed = 7;
+                this.dx = 0;
+            }
+            draw() {
+                ctx.fillStyle = "blue";
+                ctx.fillRect(this.x, this.y, this,width, this.height);
+            }
+            
+            move() {
+                this.x += this.dx;
+                if (this.x < 0) this.x = 0;
+                if (this.x + this.widht > canvas.widht) this.x = canvas.widht - this.widht;
+             
+            }
+        }
     
+    
+    
+    
+    
+    
+    
+    </script>
 </body>
 </html>
